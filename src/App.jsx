@@ -1,14 +1,10 @@
 import React from "react";
-import Header from "./components/header";
-import Footer from "./components/footer";
+import Router from "./shared/Router";
+import "./reset.css"
 function App() {
-  return <div>
-      <Header></Header>
-
-
-
-      <Footer></Footer>
-  </div>;
+  return <Router>
+    
+  </Router>
 }
 
 export default App;

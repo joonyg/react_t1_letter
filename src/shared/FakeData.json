@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "nickname": "fakerfans",
+    "creatAT": "2023년 09월 03일",
+    "content": "asdasdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "writeTo": "Faker",
+    "Avatar": " "
+  },
+  {
+    "id": 2,
+    "nickname": "Zeusfans",
+    "creatAT": "2023년 09월 03일",
+    "content": "굿 플레이어",
+    "writeTo": "Zeus",
+    "Avatar": " "
+  },
+  {
+    "id": 3,
+    "nickname": "Onerfans",
+    "creatAT": "2023년 09월 03일",
+    "content": "굿 플레이어",
+    "writeTo": "Oner",
+    "Avatar": " "
+  },
+  {
+    "id": 4,
+    "nickname": "Gumafans",
+    "creatAT": "2023년 09월 03일",
+    "content": "굿 플레이어",
+    "writeTo": "Guma",
+    "Avatar": " "
+  },
+  {
+    "id": 5,
+    "nickname": "Keriafans",
+    "creatAT": "2023년 09월 03일",
+    "content": "굿 플레이어",
+    "writeTo": "Keria",
+    "Avatar": " "
+  }
+]
