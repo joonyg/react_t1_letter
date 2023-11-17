@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Header from '../components/header'
 import Btlist from '../components/btList'
 import Footer from '../components/footer'
 import styled from 'styled-components'
 import uuid from 'react-uuid'
 import Fanletter from '../components/Fanletter'
-
+import { CaptainContext } from '../components/captaincontext'
 const FanletterBox = styled.form`
   border: 2px solid red;
   padding: 10px;
@@ -53,9 +53,9 @@ const ClickFanletterBT = styled.button`
   }
 `
 
-function Home({ Letter, setLetter }) {
+function Home() {
   // console.log(Letter, setLetter)
-  //const [Letter, setLetter] = useState(FakeData)
+  const { Letter, setLetter } = useContext(CaptainContext)
   const [Nickname, setNickname] = useState('')
   const [LetterInput, setLetterInput] = useState('')
   const [selectedPlayer, setSelectedPlayer] = useState('Zeus')

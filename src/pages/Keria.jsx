@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import styled from 'styled-components'
 import Normalimg from '../assets/imgs/normalimage.jpg'
 import { /*useLocation*/ useNavigate, useParams } from 'react-router-dom'
-
+import { CaptainContext } from '../components/captaincontext'
 const AvatarImg = styled.img`
   width: 100px;
   height: 100px;
@@ -98,12 +98,10 @@ const UpdateText = styled.textarea`
   color: white;
 `
 
-function Keria({ Letter, setLetter }) {
+function Keria() {
+  const { Letter, setLetter } = useContext(CaptainContext)
   const navigate = useNavigate()
-  //const location = useLocation()
   const { id } = useParams()
-  //const { Letter } = location.state
-  //const { GetLetter } = location.state
 
   const selectedLetters = Letter.filter(letter => letter.id === id)
 

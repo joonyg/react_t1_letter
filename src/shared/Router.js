@@ -7,37 +7,21 @@ import Guma from '../pages/Guma'
 import Keria from '../pages/Keria'
 import Oner from '../pages/Oner'
 import Zeus from '../pages/Zeus'
-
+import { CaptainContext } from '../components/captaincontext'
 function Router() {
   const [Letter, setLetter] = useState(FakeData)
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={<Home Letter={Letter} setLetter={setLetter} />}
-        ></Route>
-        <Route
-          path="Zeus/:id"
-          element={<Zeus Letter={Letter} setLetter={setLetter} />}
-        ></Route>
-        <Route
-          path="Oner/:id"
-          element={<Oner Letter={Letter} setLetter={setLetter} />}
-        ></Route>
-        <Route
-          path="Faker/:id"
-          element={<Faker Letter={Letter} setLetter={setLetter} />}
-        ></Route>
-        <Route
-          path="Guma/:id"
-          element={<Guma Letter={Letter} setLetter={setLetter} />}
-        ></Route>
-        <Route
-          path="Keria/:id"
-          element={<Keria Letter={Letter} setLetter={setLetter} />}
-        ></Route>
-      </Routes>
+      <CaptainContext.Provider value={{ Letter, setLetter }}>
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="Zeus/:id" element={<Zeus />}></Route>
+          <Route path="Oner/:id" element={<Oner />}></Route>
+          <Route path="Faker/:id" element={<Faker />}></Route>
+          <Route path="Guma/:id" element={<Guma />}></Route>
+          <Route path="Keria/:id" element={<Keria />}></Route>
+        </Routes>
+      </CaptainContext.Provider>
     </BrowserRouter>
   )
 }

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import styled from 'styled-components'
 import Normalimg from '../assets/imgs/normalimage.jpg'
 import { /*useLocation*/ useNavigate, useParams } from 'react-router-dom'
-
+import { CaptainContext } from '../components/captaincontext'
 const AvatarImg = styled.img`
   width: 100px;
   height: 100px;
@@ -98,7 +98,8 @@ const UpdateText = styled.textarea`
   color: white;
 `
 
-function Faker({ Letter, setLetter }) {
+function Faker() {
+  const { Letter, setLetter } = useContext(CaptainContext)
   const navigate = useNavigate()
   const { id } = useParams()
   const selectedLetters = Letter.filter(letter => letter.id === id)
