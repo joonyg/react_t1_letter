@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import styled from 'styled-components'
 import Normalimg from '../assets/imgs/normalimage.jpg'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { /*useLocation*/ useNavigate, useParams } from 'react-router-dom'
 
 const AvatarImg = styled.img`
   width: 100px;
@@ -84,44 +84,96 @@ const GoHomeBt = styled.button`
   box-shadow: black 7px 5px 5px 5px;
   cursor: pointer;
 `
-function Faker() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { Letter } = location.state
-  const [card, SetCard] = useState([Letter])
-  console.log(card)
-  const deleteBt = id => {
-    const delBtn = card.filter(item => item.id !== Letter.LetterID)
-    SetCard(delBtn)
-    navigate('/')
-  }
+const UpdateText = styled.textarea`
+  background-color: gray;
+  height: 275px;
+  padding: 16px;
+  line-height: 48px;
+  margin: 24px;
+  border-radius: 10px;
+  font-size: 44px;
+  word-break: break-all;
+  overflow: auto;
+  width: 722px;
+  color: white;
+`
 
+function Faker({ Letter, setLetter }) {
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const selectedLetters = Letter.filter(letter => letter.id === id)
+  const [isEdit, setIsEdit] = useState(false)
+
+  const deleteBTN = () => {
+    const pagedel = Letter.filter(letter => letter.id != id)
+    setLetter(pagedel)
+    navigate(`/`)
+  }
+  const updateBTN = () => {
+    setIsEdit(!isEdit)
+  }
+  const setupdateBTN = () => {
+    setIsEdit(false)
+  }
+  const UpadateContentChange = event => {
+    const updatedContent = event.target.value
+
+    const updatedLetters = Letter.map(letter => {
+      if (letter.id === id) {
+        return { ...letter, content: updatedContent }
+      } else {
+        return letter
+      }
+    })
+
+    setLetter(updatedLetters)
+  }
   return (
     <div>
       <Header />
-      <InfanletterContainer>
-        <GoHomeBt onClick={() => navigate(`/`)}>홈으로</GoHomeBt>
-        <Fanletterdiv key={Letter.LetterID}>
-          <div>
-            <header>
-              <figure>
-                <AvatarImg src={Normalimg}></AvatarImg>
-              </figure>
-              <span>{Letter.LetterNickname}</span>
-              <time>{Letter.LetterTime}</time>
-            </header>
-            <WirteTo>To:{Letter.LetterWriteTo}</WirteTo>
-            <ContentBox>{Letter.LetterContent}</ContentBox>
-          </div>
-          <section>
-            <button>수정완료</button>
+      {selectedLetters.map(selectedLetter => (
+        <InfanletterContainer>
+          <GoHomeBt onClick={() => navigate(`/`)}>홈으로</GoHomeBt>
+          <Fanletterdiv key={selectedLetter.id}>
+            <div>
+              <header>
+                <figure>
+                  <AvatarImg src={Normalimg}></AvatarImg>
+                </figure>
+                <span>{selectedLetter.nickname}</span>
+                <time>{selectedLetter.creatAT}</time>
+              </header>
+              <WirteTo>To:{selectedLetter.writeTo}</WirteTo>
+              {isEdit ? (
+                <>
+                  <UpdateText
+                    maxLength="100"
+                    value={selectedLetter.content}
+                    onChange={UpadateContentChange}
+                  />
+                </>
+              ) : (
+                <>
+                  <ContentBox>{selectedLetter.content}</ContentBox>
+                </>
+              )}
+            </div>
+            <section>
+              {isEdit ? (
+                <>
+                  <button onClick={setupdateBTN}>수정완료</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={updateBTN}>수정</button>
+                  <button onClick={deleteBTN}>삭제</button>
+                </>
+              )}
+            </section>
+          </Fanletterdiv>
+        </InfanletterContainer>
+      ))}
 
-            <button>수정</button>
-
-            <button onClick={deleteBt}>삭제</button>
-          </section>
-        </Fanletterdiv>
-      </InfanletterContainer>
       <Footer />
     </div>
   )

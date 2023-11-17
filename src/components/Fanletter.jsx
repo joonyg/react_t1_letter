@@ -47,20 +47,16 @@ function Fanletter({
   LetterNickname,
 }) {
   const navigate = useNavigate()
-  console.log(LetterWriteTo)
-
   return (
     <FanContainer
       onClick={() => {
         navigate(`/${LetterWriteTo}/${LetterID}`, {
           state: {
-            Letter: {
-              LetterWriteTo,
-              LetterID,
-              LetterNickname,
-              LetterContent,
-              LetterTime,
-            },
+            id: LetterID,
+            nickname: LetterNickname,
+            creatAT: LetterTime,
+            content: LetterContent,
+            writeTo: LetterWriteTo,
           },
         })
       }}

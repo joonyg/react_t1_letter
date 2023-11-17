@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/header'
-import Context from '../components/context'
+import Btlist from '../components/btList'
 import Footer from '../components/footer'
 import styled from 'styled-components'
 import uuid from 'react-uuid'
-import FakeData from '../shared/FakeData.json'
 import Fanletter from '../components/Fanletter'
 
 const FanletterBox = styled.form`
@@ -54,8 +53,9 @@ const ClickFanletterBT = styled.button`
   }
 `
 
-function Home() {
-  const [Letter, setLetter] = useState(FakeData)
+function Home({ Letter, setLetter }) {
+  // console.log(Letter, setLetter)
+  //const [Letter, setLetter] = useState(FakeData)
   const [Nickname, setNickname] = useState('')
   const [LetterInput, setLetterInput] = useState('')
   const [selectedPlayer, setSelectedPlayer] = useState('Zeus')
@@ -73,10 +73,6 @@ function Home() {
   useEffect(() => {
     setSelectedPlayer(selectedPlayer)
   }, [selectedPlayer])
-  useEffect(() => {
-    setLetter(Letter)
-  }, [Letter])
-
   const newLetter = event => {
     event.preventDefault()
     const newFanLetter = {
@@ -104,7 +100,7 @@ function Home() {
   return (
     <div>
       <Header />
-      <Context
+      <Btlist
         Letter={Letter}
         setLetter={setLetter}
         setSelectedPlayer={setSelectedPlayer}
@@ -115,7 +111,7 @@ function Home() {
             <section>
               <label>닉네임 :</label>
               <Nicknameinput
-                maxLength="4"
+                maxLength="5"
                 placeholder="최대 5자 까지 작성가능"
                 value={Nickname}
                 onChange={event => {
@@ -152,17 +148,23 @@ function Home() {
           </FanletterBox>
         </ContextContainer>
         <FanletterBox>
-          {Letter.filter(item => item.writeTo === selectedPlayer).map(item => (
-            <Fanletter
-              key={item.id}
-              LetterID={item.id}
-              LetterNickname={item.nickname}
-              LetterContent={item.content}
-              LetterWriteTo={item.writeTo}
-              LetterTime={item.creatAT}
-              LetterAvatar={item.Avatar}
-            />
-          ))}
+          {Letter.filter(item => item.writeTo === selectedPlayer).length ===
+          0 ? (
+            <p>팬레터가 없습니다.</p>
+          ) : (
+            Letter.filter(item => item.writeTo === selectedPlayer).map(item => (
+              <Fanletter
+                key={item.id}
+                LetterID={item.id}
+                LetterNickname={item.nickname}
+                LetterContent={item.content}
+                LetterWriteTo={item.writeTo}
+                LetterTime={item.creatAT}
+                LetterAvatar={item.Avatar}
+                setLetter={setLetter}
+              />
+            ))
+          )}
         </FanletterBox>
       </ContextContainer>
       <Footer />

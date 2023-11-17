@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "t1faker",
     "nickname": "fakerfans",
     "creatAT": "2023년 09월 03일",
     "content": "asdasdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -8,7 +8,7 @@
     "Avatar": " "
   },
   {
-    "id": 2,
+    "id": "t1zeus",
     "nickname": "Zeusfans",
     "creatAT": "2023년 09월 03일",
     "content": "굿 플레이어",
@@ -16,7 +16,7 @@
     "Avatar": " "
   },
   {
-    "id": 3,
+    "id": "t1oner",
     "nickname": "Onerfans",
     "creatAT": "2023년 09월 03일",
     "content": "굿 플레이어",
@@ -24,7 +24,7 @@
     "Avatar": " "
   },
   {
-    "id": 4,
+    "id": "t1guma",
     "nickname": "Gumafans",
     "creatAT": "2023년 09월 03일",
     "content": "굿 플레이어",
@@ -32,7 +32,7 @@
     "Avatar": " "
   },
   {
-    "id": 5,
+    "id": "t1keria",
     "nickname": "Keriafans",
     "creatAT": "2023년 09월 03일",
     "content": "굿 플레이어",
