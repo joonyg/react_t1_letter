@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Normalimg from '../assets/imgs/normalimage.jpg'
 import { useNavigate } from 'react-router-dom'
-
+import { useSelector } from 'react-redux/es/hooks/useSelector'
 const FanContainer = styled.li`
   background-color: black;
   margin: 3px;
@@ -39,39 +39,32 @@ const FanletterBox = styled.div`
     text-overflow: ellipsis;
   }
 `
-function Fanletter({
-  LetterWriteTo,
-  LetterID,
-  LetterTime,
-  LetterContent,
-  LetterNickname,
-}) {
+function Fanletter({ selectedPlayer }) {
   const navigate = useNavigate()
+  const Letter = useSelector(state => state.letters)
+
   return (
-    <FanContainer
-      onClick={() => {
-        navigate(`/${LetterWriteTo}/${LetterID}`, {
-          state: {
-            id: LetterID,
-            nickname: LetterNickname,
-            creatAT: LetterTime,
-            content: LetterContent,
-            writeTo: LetterWriteTo,
-          },
-        })
-      }}
-    >
-      <section>
-        <FanFigure>
-          <AvatarImg src={Normalimg} />
-        </FanFigure>
-        <FanletterBox key={LetterID}>
-          <span>{LetterNickname}</span>
-          <time>{LetterTime}</time>
-          <p>{LetterContent}</p>
-        </FanletterBox>
-      </section>
-    </FanContainer>
+    <>
+      {Letter.filter(item => item.writeTo === selectedPlayer).map(letter => (
+        <FanContainer
+          key={letter.id}
+          onClick={() => {
+            navigate(`/${letter.writeTo}/${letter.id}`, {})
+          }}
+        >
+          <section>
+            <FanFigure>
+              <AvatarImg src={Normalimg} />
+            </FanFigure>
+            <FanletterBox>
+              <span>{letter.nickname}</span>
+              <time>{letter.creatAT}</time>
+              <p>{letter.content}</p>
+            </FanletterBox>
+          </section>
+        </FanContainer>
+      ))}
+    </>
   )
 }
 

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import styled from 'styled-components'
 import Normalimg from '../assets/imgs/normalimage.jpg'
 import { /*useLocation*/ useNavigate, useParams } from 'react-router-dom'
-import { CaptainContext } from '../components/captaincontext'
+import letters, { deleteLetter } from '../redux/modules/letter'
+// import { CaptainContext } from '../components/captaincontext'
 const AvatarImg = styled.img`
   width: 100px;
   height: 100px;
@@ -99,15 +101,24 @@ const UpdateText = styled.textarea`
 `
 
 function Faker() {
-  const { Letter, setLetter } = useContext(CaptainContext)
+  const [Letter, setLetter] = useState(0)
+
+  //store에 접근 fakedata 값을 가져온다.
+
+  const letters = useSelector(state => {
+    return state.letters
+  })
+  console.log(letters)
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
   const { id } = useParams()
-  const selectedLetters = Letter.filter(letter => letter.id === id)
+  const selectedLetters = letters.filter(letter => letter.id === id)
   const [isEdit, setIsEdit] = useState(false)
 
   const deleteBTN = () => {
-    const pagedel = Letter.filter(letter => letter.id != id)
-    setLetter(pagedel)
+    // const pagedel = Letter.filter(letter => letter.id != id)
+    // setLetter(pagedel)
     navigate(`/`)
   }
   const updateBTN = () => {
@@ -119,7 +130,7 @@ function Faker() {
   const UpadateContentChange = event => {
     const updatedContent = event.target.value
 
-    const updatedLetters = Letter.map(letter => {
+    const updatedLetters = letters.map(letter => {
       if (letter.id === id) {
         return { ...letter, content: updatedContent }
       } else {
@@ -132,7 +143,7 @@ function Faker() {
   return (
     <div>
       <Header />
-      {selectedLetters.map(selectedLetter => (
+      {letters.map(selectedLetter => (
         <InfanletterContainer>
           <GoHomeBt onClick={() => navigate(`/`)}>홈으로</GoHomeBt>
           <Fanletterdiv key={selectedLetter.id}>
@@ -167,7 +178,7 @@ function Faker() {
               ) : (
                 <>
                   <button onClick={updateBTN}>수정</button>
-                  <button onClick={deleteBTN}>삭제</button>
+                  <button onClick={dispatch(deleteLetter(Letter))}>삭제</button>
                 </>
               )}
             </section>

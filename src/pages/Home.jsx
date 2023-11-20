@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { useSelector } from 'react-redux/es/hooks/useSelector'
 import Header from '../components/header'
 import Btlist from '../components/btList'
 import Footer from '../components/footer'
@@ -6,6 +7,9 @@ import styled from 'styled-components'
 import uuid from 'react-uuid'
 import Fanletter from '../components/Fanletter'
 import { CaptainContext } from '../components/captaincontext'
+import { useDispatch } from 'react-redux'
+import letters from '../redux/modules/letter'
+import { addFanLetter, ADD_FAN_LETTER } from '../redux/modules/letter'
 const FanletterBox = styled.form`
   border: 2px solid red;
   padding: 10px;
@@ -55,56 +59,38 @@ const ClickFanletterBT = styled.button`
 
 function Home() {
   // console.log(Letter, setLetter)
-  const { Letter, setLetter } = useContext(CaptainContext)
+  const dispatch = useDispatch()
+  const Letter = useSelector(state => state.letters)
+  console.log(letters)
   const [Nickname, setNickname] = useState('')
   const [LetterInput, setLetterInput] = useState('')
   const [selectedPlayer, setSelectedPlayer] = useState('Zeus')
-  const today = new Date()
-  const UpdateDate = `${today.getFullYear()}년 ${
-    today.getMonth() + 1
-  }월 ${today.getDate()}일`
-
-  useEffect(() => {
-    setNickname(Nickname)
-  }, [Nickname])
-  useEffect(() => {
-    setLetterInput(LetterInput)
-  }, [LetterInput])
-  useEffect(() => {
-    setSelectedPlayer(selectedPlayer)
-  }, [selectedPlayer])
+  console.log(LetterInput)
+  console.log(Nickname)
   const newLetter = event => {
     event.preventDefault()
-    const newFanLetter = {
-      id: uuid(),
-      nickname: Nickname,
-      creatAT: UpdateDate,
-      content: LetterInput,
-      writeTo: selectedPlayer,
-      Avatar: '',
-    }
-    setLetter([...Letter, newFanLetter])
+    dispatch(addFanLetter(Nickname, LetterInput, selectedPlayer))
     setNickname('')
     setLetterInput('')
   }
+  console.log(Letter)
+  // 나머지 컴포넌트 렌더링 코드...
+
   const InputNickname = event => {
     setNickname(event.target.value)
   }
+
   const InputLetterInput = event => {
     setLetterInput(event.target.value)
   }
+
   const SelectPlayer = event => {
     setSelectedPlayer(event.target.value)
   }
-
   return (
     <div>
       <Header />
-      <Btlist
-        Letter={Letter}
-        setLetter={setLetter}
-        setSelectedPlayer={setSelectedPlayer}
-      />
+      <Btlist Letter={Letter} setSelectedPlayer={setSelectedPlayer} />
       <ContextContainer>
         <ContextContainer>
           <FanletterBox>
@@ -141,7 +127,7 @@ function Home() {
               </select>
             </section>
             <ClickFanletter>
-              <ClickFanletterBT onClick={newLetter}>
+              <ClickFanletterBT onClick={() => newLetter}>
                 팬 래터 등록
               </ClickFanletterBT>
             </ClickFanletter>
@@ -152,18 +138,19 @@ function Home() {
           0 ? (
             <p>팬레터가 없습니다.</p>
           ) : (
-            Letter.filter(item => item.writeTo === selectedPlayer).map(item => (
-              <Fanletter
-                key={item.id}
-                LetterID={item.id}
-                LetterNickname={item.nickname}
-                LetterContent={item.content}
-                LetterWriteTo={item.writeTo}
-                LetterTime={item.creatAT}
-                LetterAvatar={item.Avatar}
-                setLetter={setLetter}
-              />
-            ))
+            Letter.filter(item => item.writeTo === selectedPlayer).map(item => {
+              return (
+                <Fanletter
+                  key={item.id}
+                  LetterID={item.id}
+                  LetterWriteTo={item.writeTo}
+                  LetterTime={item.creatAT}
+                  LetterContent={item.content}
+                  LetterNickname={item.nickname}
+                  selectedPlayer={selectedPlayer}
+                />
+              )
+            })
           )}
         </FanletterBox>
       </ContextContainer>
