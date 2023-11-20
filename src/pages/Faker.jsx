@@ -4,15 +4,16 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import styled from 'styled-components'
 import Normalimg from '../assets/imgs/normalimage.jpg'
-import { /*useLocation*/ useNavigate, useParams } from 'react-router-dom'
-import letters, { deleteLetter } from '../redux/modules/letter'
-// import { CaptainContext } from '../components/captaincontext'
+import { useNavigate, useParams } from 'react-router-dom'
+import { deleteLetter } from '../redux/modules/letter'
+
 const AvatarImg = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
 `
+
 const InfanletterContainer = styled.div`
   height: 80vh;
   background-color: gainsboro;
@@ -21,6 +22,7 @@ const InfanletterContainer = styled.div`
   align-items: center;
   overflow: hidden;
 `
+
 const Fanletterdiv = styled.div`
   background: black;
   width: 800px;
@@ -58,12 +60,14 @@ const Fanletterdiv = styled.div`
     justify-content: flex-end;
   }
 `
+
 const WirteTo = styled.p`
   font-size: 24px;
   padding-top: 10px;
   padding-left: 40px;
   font-weight: 500;
 `
+
 const ContentBox = styled.p`
   background-color: gray;
   height: 275px;
@@ -75,6 +79,7 @@ const ContentBox = styled.p`
   word-break: break-all;
   overflow: auto;
 `
+
 const GoHomeBt = styled.button`
   position: absolute;
   width: 100px;
@@ -86,6 +91,7 @@ const GoHomeBt = styled.button`
   box-shadow: black 7px 5px 5px 5px;
   cursor: pointer;
 `
+
 const UpdateText = styled.textarea`
   background-color: gray;
   height: 275px;
@@ -101,32 +107,26 @@ const UpdateText = styled.textarea`
 `
 
 function Faker() {
-  const [Letter, setLetter] = useState(0)
-
-  //store에 접근 fakedata 값을 가져온다.
-
-  const letters = useSelector(state => {
-    return state.letters
-  })
-  console.log(letters)
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
   const { id } = useParams()
-  const selectedLetters = letters.filter(letter => letter.id === id)
+  const letters = useSelector(state => state.letters)
+  const selectedLetter = letters.find(letter => letter.id === id)
   const [isEdit, setIsEdit] = useState(false)
 
   const deleteBTN = () => {
-    // const pagedel = Letter.filter(letter => letter.id != id)
-    // setLetter(pagedel)
+    dispatch(deleteLetter(id))
     navigate(`/`)
   }
+
   const updateBTN = () => {
     setIsEdit(!isEdit)
   }
+
   const setupdateBTN = () => {
     setIsEdit(false)
   }
+
   const UpadateContentChange = event => {
     const updatedContent = event.target.value
 
@@ -138,15 +138,18 @@ function Faker() {
       }
     })
 
-    setLetter(updatedLetters)
+    // dispatch action to update letters in the Redux store
+    // assuming you have an action like updateLetters
+    // dispatch(updateLetters(updatedLetters));
   }
+
   return (
     <div>
       <Header />
-      {letters.map(selectedLetter => (
+      {selectedLetter && (
         <InfanletterContainer>
           <GoHomeBt onClick={() => navigate(`/`)}>홈으로</GoHomeBt>
-          <Fanletterdiv key={selectedLetter.id}>
+          <Fanletterdiv key={id}>
             <div>
               <header>
                 <figure>
@@ -178,13 +181,13 @@ function Faker() {
               ) : (
                 <>
                   <button onClick={updateBTN}>수정</button>
-                  <button onClick={dispatch(deleteLetter(Letter))}>삭제</button>
+                  <button onClick={deleteBTN}>삭제</button>
                 </>
               )}
             </section>
           </Fanletterdiv>
         </InfanletterContainer>
-      ))}
+      )}
 
       <Footer />
     </div>

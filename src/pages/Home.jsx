@@ -127,7 +127,7 @@ function Home() {
               </select>
             </section>
             <ClickFanletter>
-              <ClickFanletterBT onClick={() => newLetter}>
+              <ClickFanletterBT onClick={newLetter}>
                 팬 래터 등록
               </ClickFanletterBT>
             </ClickFanletter>
@@ -138,19 +138,7 @@ function Home() {
           0 ? (
             <p>팬레터가 없습니다.</p>
           ) : (
-            Letter.filter(item => item.writeTo === selectedPlayer).map(item => {
-              return (
-                <Fanletter
-                  key={item.id}
-                  LetterID={item.id}
-                  LetterWriteTo={item.writeTo}
-                  LetterTime={item.creatAT}
-                  LetterContent={item.content}
-                  LetterNickname={item.nickname}
-                  selectedPlayer={selectedPlayer}
-                />
-              )
-            })
+            <Fanletter selectedPlayer={selectedPlayer} />
           )}
         </FanletterBox>
       </ContextContainer>

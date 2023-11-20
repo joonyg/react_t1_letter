@@ -3,15 +3,20 @@ import FakeData from '../../shared/FakeData.json'
 
 const DEL_LETTER = 'letter/DEL_LETTER'
 const ADD_FAN_LETTER = 'letter/ADD_FAN_LETTER'
+const UPDATE_LETTER = 'letter/UPDATE_LETTER'
 
 export const deleteLetter = payload => ({
   type: DEL_LETTER,
-  payload,
+  payload: payload,
+})
+export const updateletter = payload => ({
+  type: UPDATE_LETTER,
+  payload: payload,
 })
 
-export const addFanLetter = payload => ({
+export const addFanLetter = (Nickname, LetterInput, selectedPlayer) => ({
   type: ADD_FAN_LETTER,
-  payload,
+  payload: { Nickname, LetterInput, selectedPlayer },
 })
 
 // Reducer
@@ -26,21 +31,29 @@ const letters = (state = letterState, action) => {
 
     case ADD_FAN_LETTER:
       const today = new Date()
-      const UpdateDate = `${today.getFullYear()}년 ${
+      const updateDate = `${today.getFullYear()}년 ${
         today.getMonth() + 1
       }월 ${today.getDate()}일`
 
       const newFanLetter = {
-        id: action.payload.id,
-        nickname: action.payload.nickname,
-        creatAT: UpdateDate,
-        content: action.payload.content,
-        writeTo: action.payload.writeTo,
+        id: uuid(),
+        nickname: action.payload.Nickname,
+        creatAT: updateDate,
+        content: action.payload.LetterInput,
+        writeTo: action.payload.selectedPlayer,
         Avatar: '',
       }
 
-      return [...state, newFanLetter]
-
+      return [newFanLetter, ...state]
+    case UPDATE_LETTER:
+      const updatedLetters = letters.map(state => {
+        if (state.id === id) {
+          return { ...state, content: updatedContent }
+        } else {
+          return state
+        }
+      })
+      return [updatedLetters]
     default:
       return state
   }
