@@ -1,16 +1,113 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import styled from 'styled-components'
 import Normalimg from '../assets/imgs/normalimage.jpg'
-import { /*useLocation*/ useNavigate, useParams } from 'react-router-dom'
-import { CaptainContext } from '../components/captaincontext'
+import { useNavigate, useParams } from 'react-router-dom'
+import { deleteLetter, updateletter } from '../redux/modules/letter'
+
+export default function Zeus() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const letters = useSelector(state => state.letters)
+  const selectedLetter = letters.find(letter => letter.id === id)
+  const [isEdit, setIsEdit] = useState(false)
+  const [updatedContent, setUpdatedContent] = useState(
+    selectedLetter ? selectedLetter.content : ''
+  )
+
+  const deleteBTN = () => {
+    const answer = window.confirm('삭제하시겠습니까?')
+
+    if (!answer) return
+    dispatch(deleteLetter(id))
+    navigate(`/`)
+  }
+
+  const updateBTN = () => {
+    setIsEdit(!isEdit)
+  }
+
+  const setupdateBTN = () => {
+    setIsEdit(false)
+  }
+
+  const UpadateContentChange = event => {
+    const content = event.target.value
+    setUpdatedContent(content)
+  }
+
+  const saveUpdatedContent = () => {
+    if (updatedContent === selectedLetter.content) {
+      alert('수정사항이 없습니다.')
+      return
+    }
+
+    dispatch(updateletter({ id, updatedContent }))
+    setIsEdit(false)
+  }
+
+  return (
+    <div>
+      <Header />
+      {selectedLetter && (
+        <InfanletterContainer>
+          <GoHomeBt onClick={() => navigate(`/`)}>홈으로</GoHomeBt>
+          <Fanletterdiv key={id}>
+            <div>
+              <header>
+                <figure>
+                  <AvatarImg src={Normalimg}></AvatarImg>
+                </figure>
+                <span>{selectedLetter.nickname}</span>
+                <time>{selectedLetter.creatAT}</time>
+              </header>
+              <WirteTo>To:{selectedLetter.writeTo}</WirteTo>
+              {isEdit ? (
+                <>
+                  <UpdateText
+                    maxLength="100"
+                    value={updatedContent}
+                    onChange={UpadateContentChange}
+                  />
+                </>
+              ) : (
+                <>
+                  <ContentBox>{selectedLetter.content}</ContentBox>
+                </>
+              )}
+              <section>
+                {isEdit ? (
+                  <>
+                    <button onClick={saveUpdatedContent}>저장</button>
+                    <button onClick={setupdateBTN}>취소</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={updateBTN}>수정</button>
+                    <button onClick={deleteBTN}>삭제</button>
+                  </>
+                )}
+              </section>
+            </div>
+          </Fanletterdiv>
+        </InfanletterContainer>
+      )}
+
+      <Footer />
+    </div>
+  )
+}
+
 const AvatarImg = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
 `
+
 const InfanletterContainer = styled.div`
   height: 80vh;
   background-color: gainsboro;
@@ -19,6 +116,7 @@ const InfanletterContainer = styled.div`
   align-items: center;
   overflow: hidden;
 `
+
 const Fanletterdiv = styled.div`
   background: black;
   width: 800px;
@@ -56,12 +154,14 @@ const Fanletterdiv = styled.div`
     justify-content: flex-end;
   }
 `
+
 const WirteTo = styled.p`
   font-size: 24px;
   padding-top: 10px;
   padding-left: 40px;
   font-weight: 500;
 `
+
 const ContentBox = styled.p`
   background-color: gray;
   height: 275px;
@@ -73,6 +173,7 @@ const ContentBox = styled.p`
   word-break: break-all;
   overflow: auto;
 `
+
 const GoHomeBt = styled.button`
   position: absolute;
   width: 100px;
@@ -84,6 +185,7 @@ const GoHomeBt = styled.button`
   box-shadow: black 7px 5px 5px 5px;
   cursor: pointer;
 `
+
 const UpdateText = styled.textarea`
   background-color: gray;
   height: 275px;
@@ -97,88 +199,3 @@ const UpdateText = styled.textarea`
   width: 722px;
   color: white;
 `
-
-function Zeus() {
-  const { Letter, setLetter } = useContext(CaptainContext)
-  const navigate = useNavigate()
-  //const location = useLocation()
-  const { id } = useParams()
-  //const { Letter } = location.state
-  //const { GetLetter } = location.state
-
-  const selectedLetters = Letter.filter(letter => letter.id === id)
-
-  const [isEdit, setIsEdit] = useState(false)
-
-  const deleteBTN = () => {
-    const pagedel = Letter.filter(letter => letter.id != id)
-    setLetter(pagedel)
-    navigate(`/`)
-  }
-  const updateBTN = () => {
-    setIsEdit(!isEdit)
-  }
-  const setupdateBTN = () => {
-    setIsEdit(false)
-  }
-  const UpadateContentChange = event => {
-    const updatedContent = event.target.value
-
-    const updatedLetters = Letter.map(letter =>
-      letter.id === id ? { ...letter, content: updatedContent } : letter
-    )
-
-    setLetter(updatedLetters)
-  }
-  return (
-    <div>
-      <Header />
-      {selectedLetters.map(selectedLetter => (
-        <InfanletterContainer>
-          <GoHomeBt onClick={() => navigate(`/`)}>홈으로</GoHomeBt>
-          <Fanletterdiv key={selectedLetter.id}>
-            <div>
-              <header>
-                <figure>
-                  <AvatarImg src={Normalimg}></AvatarImg>
-                </figure>
-                <span>{selectedLetter.nickname}</span>
-                <time>{selectedLetter.creatAT}</time>
-              </header>
-              <WirteTo>To:{selectedLetter.writeTo}</WirteTo>
-              {isEdit ? (
-                <>
-                  <UpdateText
-                    maxLength="100"
-                    value={selectedLetter.content}
-                    onChange={UpadateContentChange}
-                  />
-                </>
-              ) : (
-                <>
-                  <ContentBox>{selectedLetter.content}</ContentBox>
-                </>
-              )}
-            </div>
-            <section>
-              {isEdit ? (
-                <>
-                  <button onClick={setupdateBTN}>수정완료</button>
-                </>
-              ) : (
-                <>
-                  <button onClick={updateBTN}>수정</button>
-                  <button onClick={deleteBTN}>삭제</button>
-                </>
-              )}
-            </section>
-          </Fanletterdiv>
-        </InfanletterContainer>
-      ))}
-
-      <Footer />
-    </div>
-  )
-}
-
-export default Zeus

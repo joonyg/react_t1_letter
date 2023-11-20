@@ -1,6 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
 
+export default function Context(props) {
+  const selectPlayer = name => {
+    props.setSelectedPlayer(name)
+  }
+
+  return (
+    <>
+      <PlayerBTcontainer>
+        <PlayerUI>
+          <PlayerBT onClick={() => selectPlayer('Zeus')}>ZEUS</PlayerBT>
+          <PlayerBT onClick={() => selectPlayer('Oner')}>ONER</PlayerBT>
+          <PlayerBT onClick={() => selectPlayer('Faker')}>FAKER</PlayerBT>
+          <PlayerBT onClick={() => selectPlayer('Guma')}>GUMAYUSI</PlayerBT>
+          <PlayerBT onClick={() => selectPlayer('Keria')}>KERIA</PlayerBT>
+        </PlayerUI>
+      </PlayerBTcontainer>
+    </>
+  )
+}
 const PlayerUI = styled.nav`
   color: black;
 `
@@ -29,25 +48,3 @@ const PlayerBTcontainer = styled.div`
   display: flex;
   justify-content: center;
 `
-
-function Context(props) {
-  const selectPlayer = name => {
-    props.setSelectedPlayer(name)
-  }
-
-  return (
-    <>
-      <PlayerBTcontainer>
-        <PlayerUI>
-          <PlayerBT onClick={() => selectPlayer('Zeus')}>ZEUS</PlayerBT>
-          <PlayerBT onClick={() => selectPlayer('Oner')}>ONER</PlayerBT>
-          <PlayerBT onClick={() => selectPlayer('Faker')}>FAKER</PlayerBT>
-          <PlayerBT onClick={() => selectPlayer('Guma')}>GUMAYUSI</PlayerBT>
-          <PlayerBT onClick={() => selectPlayer('Keria')}>KERIA</PlayerBT>
-        </PlayerUI>
-      </PlayerBTcontainer>
-    </>
-  )
-}
-
-export default Context

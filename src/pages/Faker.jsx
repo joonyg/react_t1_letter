@@ -7,6 +7,101 @@ import Normalimg from '../assets/imgs/normalimage.jpg'
 import { useNavigate, useParams } from 'react-router-dom'
 import { deleteLetter, updateletter } from '../redux/modules/letter'
 
+export default function Faker() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const letters = useSelector(state => state.letters)
+  const selectedLetter = letters.find(letter => letter.id === id)
+  const [isEdit, setIsEdit] = useState(false)
+  const [updatedContent, setUpdatedContent] = useState(
+    selectedLetter ? selectedLetter.content : ''
+  )
+
+  const deleteBTN = () => {
+    const answer = window.confirm('삭제하시겠습니까?')
+
+    if (!answer) return
+
+    dispatch(deleteLetter(id))
+    navigate(`/`)
+  }
+
+  const updateBTN = () => {
+    setIsEdit(!isEdit)
+  }
+
+  const setupdateBTN = () => {
+    setIsEdit(false)
+  }
+
+  const UpadateContentChange = event => {
+    const content = event.target.value
+    setUpdatedContent(content)
+  }
+
+  const saveUpdatedContent = () => {
+    if (updatedContent === selectedLetter.content) {
+      alert('수정사항이 없습니다.')
+      return
+    }
+
+    dispatch(updateletter({ id, updatedContent }))
+    setIsEdit(false)
+  }
+
+  return (
+    <div>
+      <Header />
+      {selectedLetter && (
+        <InfanletterContainer>
+          <GoHomeBt onClick={() => navigate(`/`)}>홈으로</GoHomeBt>
+          <Fanletterdiv key={id}>
+            <div>
+              <header>
+                <figure>
+                  <AvatarImg src={Normalimg}></AvatarImg>
+                </figure>
+                <span>{selectedLetter.nickname}</span>
+                <time>{selectedLetter.creatAT}</time>
+              </header>
+              <WirteTo>To:{selectedLetter.writeTo}</WirteTo>
+              {isEdit ? (
+                <>
+                  <UpdateText
+                    maxLength="100"
+                    value={updatedContent}
+                    onChange={UpadateContentChange}
+                  />
+                </>
+              ) : (
+                <>
+                  <ContentBox>{selectedLetter.content}</ContentBox>
+                </>
+              )}
+              <section>
+                {isEdit ? (
+                  <>
+                    <button onClick={saveUpdatedContent}>저장</button>
+                    <button onClick={setupdateBTN}>취소</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={updateBTN}>수정</button>
+                    <button onClick={deleteBTN}>삭제</button>
+                  </>
+                )}
+              </section>
+            </div>
+          </Fanletterdiv>
+        </InfanletterContainer>
+      )}
+
+      <Footer />
+    </div>
+  )
+}
+
 const AvatarImg = styled.img`
   width: 100px;
   height: 100px;
@@ -105,91 +200,3 @@ const UpdateText = styled.textarea`
   width: 722px;
   color: white;
 `
-
-function Faker() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { id } = useParams()
-  const letters = useSelector(state => state.letters)
-  const selectedLetter = letters.find(letter => letter.id === id)
-  const [isEdit, setIsEdit] = useState(false)
-  const [updatedContent, setUpdatedContent] = useState(
-    selectedLetter ? selectedLetter.content : ''
-  )
-
-  const deleteBTN = () => {
-    dispatch(deleteLetter(id))
-    navigate(`/`)
-  }
-
-  const updateBTN = () => {
-    setIsEdit(!isEdit)
-  }
-
-  const setupdateBTN = () => {
-    setIsEdit(false)
-  }
-
-  const UpadateContentChange = event => {
-    const content = event.target.value
-    setUpdatedContent(content)
-  }
-
-  const saveUpdatedContent = () => {
-    dispatch(updateletter({ id, updatedContent }))
-    setIsEdit(false)
-  }
-
-  return (
-    <div>
-      <Header />
-      {selectedLetter && (
-        <InfanletterContainer>
-          <GoHomeBt onClick={() => navigate(`/`)}>홈으로</GoHomeBt>
-          <Fanletterdiv key={id}>
-            <div>
-              <header>
-                <figure>
-                  <AvatarImg src={Normalimg}></AvatarImg>
-                </figure>
-                <span>{selectedLetter.nickname}</span>
-                <time>{selectedLetter.creatAT}</time>
-              </header>
-              <WirteTo>To:{selectedLetter.writeTo}</WirteTo>
-              {isEdit ? (
-                <>
-                  <UpdateText
-                    maxLength="100"
-                    value={updatedContent}
-                    onChange={UpadateContentChange}
-                  />
-                  <button onClick={saveUpdatedContent}>저장</button>
-                </>
-              ) : (
-                <>
-                  <ContentBox>{selectedLetter.content}</ContentBox>
-                </>
-              )}
-            </div>
-            <section>
-              {isEdit ? (
-                <>
-                  <button onClick={setupdateBTN}>취소</button>
-                </>
-              ) : (
-                <>
-                  <button onClick={updateBTN}>수정</button>
-                  <button onClick={deleteBTN}>삭제</button>
-                </>
-              )}
-            </section>
-          </Fanletterdiv>
-        </InfanletterContainer>
-      )}
-
-      <Footer />
-    </div>
-  )
-}
-
-export default Faker

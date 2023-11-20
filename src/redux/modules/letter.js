@@ -34,7 +34,6 @@ const letters = (state = letterState, action) => {
       const updateDate = `${today.getFullYear()}년 ${
         today.getMonth() + 1
       }월 ${today.getDate()}일`
-
       const newFanLetter = {
         id: uuid(),
         nickname: action.payload.Nickname,
@@ -43,8 +42,8 @@ const letters = (state = letterState, action) => {
         writeTo: action.payload.selectedPlayer,
         Avatar: '',
       }
-
       return [newFanLetter, ...state]
+
     case UPDATE_LETTER:
       const { id, updatedContent } = action.payload
       const updatedLetters = state.map(letter => {
