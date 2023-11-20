@@ -46,14 +46,16 @@ const letters = (state = letterState, action) => {
 
       return [newFanLetter, ...state]
     case UPDATE_LETTER:
-      const updatedLetters = letters.map(state => {
-        if (state.id === id) {
-          return { ...state, content: updatedContent }
+      const { id, updatedContent } = action.payload
+      const updatedLetters = state.map(letter => {
+        if (letter.id === id) {
+          return { ...letter, content: updatedContent }
         } else {
-          return state
+          return letter
         }
       })
-      return [updatedLetters]
+      return updatedLetters
+
     default:
       return state
   }

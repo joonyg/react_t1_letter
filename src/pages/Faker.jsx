@@ -5,7 +5,7 @@ import Footer from '../components/footer'
 import styled from 'styled-components'
 import Normalimg from '../assets/imgs/normalimage.jpg'
 import { useNavigate, useParams } from 'react-router-dom'
-import { deleteLetter } from '../redux/modules/letter'
+import { deleteLetter, updateletter } from '../redux/modules/letter'
 
 const AvatarImg = styled.img`
   width: 100px;
@@ -113,6 +113,9 @@ function Faker() {
   const letters = useSelector(state => state.letters)
   const selectedLetter = letters.find(letter => letter.id === id)
   const [isEdit, setIsEdit] = useState(false)
+  const [updatedContent, setUpdatedContent] = useState(
+    selectedLetter ? selectedLetter.content : ''
+  )
 
   const deleteBTN = () => {
     dispatch(deleteLetter(id))
@@ -128,19 +131,13 @@ function Faker() {
   }
 
   const UpadateContentChange = event => {
-    const updatedContent = event.target.value
+    const content = event.target.value
+    setUpdatedContent(content)
+  }
 
-    const updatedLetters = letters.map(letter => {
-      if (letter.id === id) {
-        return { ...letter, content: updatedContent }
-      } else {
-        return letter
-      }
-    })
-
-    // dispatch action to update letters in the Redux store
-    // assuming you have an action like updateLetters
-    // dispatch(updateLetters(updatedLetters));
+  const saveUpdatedContent = () => {
+    dispatch(updateletter({ id, updatedContent }))
+    setIsEdit(false)
   }
 
   return (
@@ -163,9 +160,10 @@ function Faker() {
                 <>
                   <UpdateText
                     maxLength="100"
-                    value={selectedLetter.content}
+                    value={updatedContent}
                     onChange={UpadateContentChange}
                   />
+                  <button onClick={saveUpdatedContent}>저장</button>
                 </>
               ) : (
                 <>
@@ -176,7 +174,7 @@ function Faker() {
             <section>
               {isEdit ? (
                 <>
-                  <button onClick={setupdateBTN}>수정완료</button>
+                  <button onClick={setupdateBTN}>취소</button>
                 </>
               ) : (
                 <>
