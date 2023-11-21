@@ -10,54 +10,8 @@ import { CaptainContext } from '../components/captaincontext'
 import { useDispatch } from 'react-redux'
 import letters from '../redux/modules/letter'
 import { addFanLetter, ADD_FAN_LETTER } from '../redux/modules/letter'
-const FanletterBox = styled.form`
-  border: 2px solid red;
-  padding: 10px;
-  width: 550px;
-  height: 350px;
-  margin: 0 auto; /* 가운데 정렬을 위해 추가 */
-  color: white;
-  overflow: auto;
-`
-const Nicknameinput = styled.input`
-  width: 100%;
-  vertical-align: middle;
-  padding: 5px 10px;
-`
-const Fanletterinput = styled.textarea`
-  width: 100%;
-  height: 150px;
-  resize: none;
-  vertical-align: middle;
-  font-size: 1em;
-  font-family: Arial, Helvetica, sans-serif;
-  padding: 3px;
-`
-const FanSelectlabel = styled.label`
-  width: 240px;
-`
-const ClickFanletter = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`
-const ContextContainer = styled.div`
-  padding: 20px;
-  background-color: black;
-`
-const ClickFanletterBT = styled.button`
-  color: white;
-  background-color: gray;
-  width: 100px;
-  height: 30px;
-  &:hover {
-    background-color: black;
-  }
-  &:active {
-    background-color: black;
-  }
-`
 
-function Home() {
+export default function Home() {
   // console.log(Letter, setLetter)
   const dispatch = useDispatch()
   const Letter = useSelector(state => state.letters)
@@ -65,6 +19,7 @@ function Home() {
   const [Nickname, setNickname] = useState('')
   const [LetterInput, setLetterInput] = useState('')
   const [selectedPlayer, setSelectedPlayer] = useState('Zeus')
+
   console.log(LetterInput)
   console.log(Nickname)
   const newLetter = event => {
@@ -146,5 +101,49 @@ function Home() {
     </div>
   )
 }
-
-export default Home
+const FanletterBox = styled.form`
+  border: 2px solid red;
+  padding: 10px;
+  width: 550px;
+  height: 350px;
+  margin: 0 auto; /* 가운데 정렬을 위해 추가 */
+  color: white;
+  overflow: auto;
+`
+const Nicknameinput = styled.input`
+  width: 100%;
+  vertical-align: middle;
+  padding: 5px 10px;
+`
+const Fanletterinput = styled.textarea`
+  width: 100%;
+  height: 150px;
+  resize: none;
+  vertical-align: middle;
+  font-size: 1em;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 3px;
+`
+const FanSelectlabel = styled.label`
+  width: 240px;
+`
+const ClickFanletter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+const ContextContainer = styled.div`
+  padding: 20px;
+  background-color: black;
+`
+const ClickFanletterBT = styled.button`
+  color: white;
+  background-color: gray;
+  width: 100px;
+  height: 30px;
+  &:hover {
+    background-color: black;
+  }
+  &:active {
+    background-color: black;
+  }
+`
